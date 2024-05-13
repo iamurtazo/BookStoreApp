@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Category>
+
+<div class="container">
+    <div class="row pt-4 pb-2">
+        <div class="col-6">
+            <h2 class="text-dark text-start">
+                Category List
+            </h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="Category" asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Create New
+            </a>
+        </div>
+    </div>
+
+</div>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DisplayOrder)
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.OrderBy(c => c.DisplayOrder))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DisplayOrder)
+                </td>
+                <td>
+                    <div class="w-75 btn-group" role="group">
+                        <a asp-action="Edit" class="btn btn-primary" asp-route-id="@item.Id">
+                            <i class="bi bi-pencil-square"></i> Edit
+                        </a> 
+                        <a asp-action="Details" class="btn btn-success" asp-route-id="@item.Id">
+                            <i class="bi bi-info-circle"></i> Details
+                        </a> 
+                        <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id">
+                            <i class="bi bi-trash"></i> Delete
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
