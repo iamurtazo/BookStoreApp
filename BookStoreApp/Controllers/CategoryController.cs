@@ -34,6 +34,7 @@ public class CategoryController : Controller
         {
             _context.Categories.Add(category);
             _context.SaveChanges();
+            TempData["success"] = "Category has been added successfully!";
             return RedirectToAction("Index");
         }
         return View();
@@ -61,6 +62,7 @@ public class CategoryController : Controller
         {
             _context.Categories.Update(category);
             _context.SaveChanges();
+            TempData["success"] = "Category has been updated successfully!";
             return RedirectToAction("Index");
         }
 
@@ -79,7 +81,6 @@ public class CategoryController : Controller
         return View(category);
     }
     #endregion
-
 
     #region Delete
     public IActionResult Delete(int? id)
@@ -102,6 +103,7 @@ public class CategoryController : Controller
 
         _context.Categories.Remove(category);
         _context.SaveChanges();
+        TempData["success"] = "Category has been deleted successfully!";
         return RedirectToAction("Index");
     }
     #endregion
