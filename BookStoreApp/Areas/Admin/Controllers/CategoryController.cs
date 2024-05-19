@@ -2,8 +2,9 @@
 using BookStorreApp.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BookStoreApp.Controllers;
+namespace BookStoreApp.Areas.Admin.Controllers;
 
+[Area("Admin")]
 public class CategoryController : Controller
 {
     private readonly ICategoryRepository _repo;
@@ -15,7 +16,7 @@ public class CategoryController : Controller
 
     #region Index
     public IActionResult Index()
-    {      
+    {
         return View(_repo.GetAll());
     }
     #endregion
@@ -27,7 +28,7 @@ public class CategoryController : Controller
     }
 
     [HttpPost]
-    public IActionResult Create(Category category) 
+    public IActionResult Create(Category category)
     {
         if (ModelState.IsValid)
         {
@@ -53,7 +54,7 @@ public class CategoryController : Controller
     [HttpPost]
     public IActionResult Edit(int id, Category category)
     {
-        if(id != category.Id)
+        if (id != category.Id)
             return NotFound();
 
         if (ModelState.IsValid)
@@ -95,7 +96,7 @@ public class CategoryController : Controller
     {
         Category category = _repo.GetById(id);
 
-        if(category == null)
+        if (category == null)
             return NotFound();
 
         _repo.Remove(category);
