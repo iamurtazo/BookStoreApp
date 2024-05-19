@@ -1,23 +1,22 @@
-﻿using BookStoreApp.DataAccess;
-using BookStoreApp.Models;
+﻿using BookStoreApp.Models;
+using BookStorreApp.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStoreApp.Controllers;
 
 public class CategoryController : Controller
 {
-    private readonly ApplicationDbContext _context;
+    private readonly ICategoryRepository _repo;
 
-    public CategoryController(ApplicationDbContext context)
+    public CategoryController(ICategoryRepository repo)
     {
-        _context = context;
+        _repo = repo;
     }
 
     #region Index
     public IActionResult Index()
-    {
-        List<Category> categories = _context.Categories.ToList();
-        return View(categories);
+    {      
+        return View(_repo.GetAll());
     }
     #endregion
 
@@ -32,8 +31,7 @@ public class CategoryController : Controller
     {
         if (ModelState.IsValid)
         {
-            _context.Categories.Add(category);
-            _context.SaveChanges();
+            _repo.Add(category);
             TempData["success"] = "Category has been added successfully!";
             return RedirectToAction("Index");
         }
@@ -44,7 +42,7 @@ public class CategoryController : Controller
     #region Edit
     public IActionResult Edit(int? id)
     {
-        Category category = _context.Categories.Find(id);
+        Category category = _repo.GetById(id);
 
         if (category == null)
             return NotFound();
@@ -60,8 +58,7 @@ public class CategoryController : Controller
 
         if (ModelState.IsValid)
         {
-            _context.Categories.Update(category);
-            _context.SaveChanges();
+            _repo.Update(category);
             TempData["success"] = "Category has been updated successfully!";
             return RedirectToAction("Index");
         }
@@ -73,7 +70,7 @@ public class CategoryController : Controller
     #region Details
     public IActionResult Details(int? id)
     {
-        Category category = _context.Categories.Find(id);
+        Category category = _repo.GetById(id);
 
         if (category == null)
             return NotFound();
@@ -85,7 +82,7 @@ public class CategoryController : Controller
     #region Delete
     public IActionResult Delete(int? id)
     {
-        Category category = _context.Categories.Find(id);
+        Category category = _repo.GetById(id);
 
         if (category == null)
             return NotFound();
@@ -96,13 +93,12 @@ public class CategoryController : Controller
     [HttpPost, ActionName("Delete")]
     public IActionResult DeleteConfirmed(int? id)
     {
-        Category category = _context.Categories.Find(id);
+        Category category = _repo.GetById(id);
 
         if(category == null)
             return NotFound();
 
-        _context.Categories.Remove(category);
-        _context.SaveChanges();
+        _repo.Remove(category);
         TempData["success"] = "Category has been deleted successfully!";
         return RedirectToAction("Index");
     }
